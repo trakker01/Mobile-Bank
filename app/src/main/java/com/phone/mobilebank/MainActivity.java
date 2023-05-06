@@ -1,5 +1,6 @@
 package com.phone.mobilebank;
-
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.phone.mobilebank.ui.data_base.Communication;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ImageButton;
@@ -21,11 +22,13 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-
+    Communication com;
+    FirebaseFirestore db ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        db= FirebaseFirestore.getInstance();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -43,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+    }
+
+    public FirebaseFirestore getDB(){
+        return db;
+    }
+
+    public void getInstance(){
+        db = FirebaseFirestore.getInstance();
     }
 
     private void ShowDialog(){

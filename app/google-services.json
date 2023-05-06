@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "498354890997",
+    "firebase_url": "https://mobilebank-5d2a7-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "mobilebank-5d2a7",
+    "storage_bucket": "mobilebank-5d2a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498354890997:android:ebef3a1e8df7fd4d977dbc",
+        "android_client_info": {
+          "package_name": "com.phone.mobilebank"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "498354890997-aag0shjvip27ogt6apg84jq4agcrisiv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAXXS-XZs7AZYyFjFAAy01MsdZdw9cPVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "498354890997-aag0shjvip27ogt6apg84jq4agcrisiv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

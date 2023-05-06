@@ -3,6 +3,7 @@ package com.phone.mobilebank.ui.card_transfer;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.arch.core.*;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -64,14 +65,14 @@ public class CardTransferFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         CardTransferViewModel cardTransferViewModel =
                 new ViewModelProvider(this).get(CardTransferViewModel.class);
 
         binding = FragmentCardTransferBinding.inflate(inflater,container,false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textCardTransfer;;
-        cardTransferViewModel.getText().observe(getViewLifecycleOwner(),textView::setText);
+        final TextView textView = binding.textCardTransfer;
 
         return root;
     }

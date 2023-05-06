@@ -1,42 +1,42 @@
 package com.phone.mobilebank.ui.home;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.phone.mobilebank.ui.data_base.Communication;
 import android.app.Dialog;
 import android.graphics.Color;
-import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.phone.mobilebank.MainActivity;
 import com.phone.mobilebank.R;
 import com.phone.mobilebank.databinding.FragmentHomeBinding;
-
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.MongoException;
-import com.mongodb.ServerApi;
-import com.mongodb.ServerApiVersion;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private Communication com;
+
+    String T1 ,T2;
+
+    public static final String TAG = "YOUR-TAG-NAME";
+
+    FirebaseFirestore database = FirebaseFirestore.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +54,22 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 NavHostFragment.findNavController(HomeFragment.this)
                         .navigate(R.id.nav_card_transfer);
+                database.collection("Accounts")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                        T1 = document.getId().toString();
+                                        T2 = document.getData().toString();
+                                    }
+                                } else {
+                                    Log.w(TAG, "Error getting documents.", task.getException());
+                                }
+                            }
+                        });
             }
         });
 
@@ -63,26 +79,7 @@ public class HomeFragment extends Fragment {
                 NavHostFragment.findNavController(HomeFragment.this)
                         .navigate(R.id.nav_bill_payment);
 
-                String connectionString = "mongodb+srv://brogarertaster9837:2cB4Z2DO2dYeeBCD@banca.x5apjpw.mongodb.net/?retryWrites=true&w=majority";
-                ServerApi serverApi = ServerApi.builder()
-                        .version(ServerApiVersion.V1)
-                        .build();
-                MongoClientSettings settings = MongoClientSettings.builder()
-                        .applyConnectionString(new ConnectionString(connectionString))
-                        .serverApi(serverApi)
-                        .build();
-                // Create a new client and connect to the server
-                try (MongoClient mongoClient = MongoClients.create(settings)) {
-                    try {
-                        // Send a ping to confirm a successful connection
-                        MongoDatabase database = mongoClient.getDatabase("admin");
-                        database.runCommand(new Document("ping", 1));
-                        System.out.println("Pinged your deployment. You successfully connected to MongoDB!");
-                    } catch (MongoException e) {
-                        e.printStackTrace();
-                    }
                 }
-            }
         });
 
         binding.IMBTNRetrieveCash.setOnClickListener(new View.OnClickListener() {
@@ -126,9 +123,9 @@ public class HomeFragment extends Fragment {
                 LinearLayout p_cw = dialog2.findViewById(R.id.card_cw);
 
                 TextView t1 = p_card_number.findViewById(R.id.personal_card_number);
-                t1.setText("1243 5674 1243 9856");
+                t1.setText(T1);
                 TextView t2 = p_name.findViewById(R.id.personal_card_name);
-                t2.setText("Maxim Gabor");
+                t2.setText(T2);
                 TextView t3 = p_expiry_Day.findViewById(R.id.personal_card_expiry_date);
                 t3.setText("08 / 27");
                 TextView t4 = p_cw.findViewById(R.id.personal_card_cw);
