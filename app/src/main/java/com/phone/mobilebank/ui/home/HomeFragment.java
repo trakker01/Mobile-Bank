@@ -2,6 +2,8 @@ package com.phone.mobilebank.ui.home;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -45,7 +47,7 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
+        final String[] name1 = new String[1];
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
@@ -54,16 +56,23 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 NavHostFragment.findNavController(HomeFragment.this)
                         .navigate(R.id.nav_card_transfer);
-                database.collection("Accounts")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+               DocumentReference docRef = database.collection("Accounts").document("1");
+               // database.collection("Accounts").document("1")
+                        docRef.get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Log.d(TAG, document.getId() + " => " + document.getData());
-                                        T1 = document.getId().toString();
-                                        T2 = document.getData().toString();
+                                     DocumentSnapshot document = task.getResult();
+                                     if (document.exists())
+                                     {
+
+                                         name1[0] = document.getString("Name");
+                                         Log.d(TAG, document.getId() + " => " + document.getData());
+                                         T1 = name1[0];
+                                         T2 = document.getData().toString();
+                                    }else{
+                                         Log.d(TAG,"No such document");
                                     }
                                 } else {
                                     Log.w(TAG, "Error getting documents.", task.getException());

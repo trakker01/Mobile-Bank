@@ -4,13 +4,26 @@ package com.phone.mobilebank.ui.add_card;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.phone.mobilebank.ui.add_card.Add_cardViewModel;
 
 import com.phone.mobilebank.R;
@@ -25,11 +38,12 @@ public class Add_cardFragment extends Fragment {
 
     private FragmentAddCardBinding binding;
 
+    FirebaseFirestore database;
+    public static final String TAG = "YOUR-TAG-NAME";
     //Communication com = new Communication();
 
     //String data = com.GetData();
     //Add_cardViewModel card = new Add_cardViewModel();
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,8 +51,9 @@ public class Add_cardFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String DBName;
+    private String DBExpiration_Date;
+    private String DBNumber_card;
 
     public Add_cardFragment() {
         // Required empty public constructor
@@ -65,10 +80,6 @@ public class Add_cardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -81,7 +92,69 @@ public class Add_cardFragment extends Fragment {
         View root = binding.getRoot();
         final TextView textView = binding.textAddCard;
         add_cardViewModel.getText().observe(getViewLifecycleOwner(),textView::setText);
+
+
+
+        binding.submitData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              //  if(!binding.textName.getText().toString().equals(""))
+               // { TextView ET;
+                 //   if(!binding.textExpirationCard.getText().toString().equals(""))
+                 //   {
+                     //   if(!binding.textNumberCard.getText().toString().equals(""))
+                     //   {
+
+                            String Name = binding.textName.getText().toString();
+                            String Expiration = binding.textExpirationCard.getText().toString();
+                            String Number = binding.textNumberCard.getText().toString();
+
+                            database = FirebaseFirestore.getInstance();
+                            //QueryDocumentSnapshot docRef = database.collection("Accounts");
+                            database.collection("Accounts")
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for(QueryDocumentSnapshot document : task.getResult())
+                                                {
+                                                        if(Name.equals(document.getString("Name")) &&
+                                                                Expiration.equals(document.getString("Expiration_date"))
+                                                                        && Number.equals(document.getString("Card_Number"))){
+
+                                                            Log.d(TAG,document.getData() + " " + document.getString("Name") + " " +
+                                                                    document.getString("Expiration_date") + " " + document.getString("Card_Number"));
+
+                                                            binding.textAddCard.setText(document.getString("Name"));
+                                                            binding.textAddCard2.setText(document.getString("Expiration_date"));
+                                                            binding.textAddCard3.setText(document.getString("Card_Number"));
+
+                                                        }
+                                                }
+                                            } else {
+                                                Log.w(TAG, "Error getting documents.", task.getException());
+                                            }
+                                        }
+                                    });
+
+                      //  }else {
+
+                     //   }
+                   // }
+                   // else{
+
+                 //   }
+              //  }
+               // else {
+
+             //   }
+            }
+        });
+
+
        // add_cardViewModel.ChangeText(data);
+
         return root;
     }
 

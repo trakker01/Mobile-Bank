@@ -13,10 +13,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Communication {
    MainActivity m ;
-   FirebaseFirestore database = FirebaseFirestore.getInstance();
+   FirebaseFirestore database;
    public static final String TAG = "YOUR-TAG-NAME";
-   public void GetData(){
-      database.collection("Accounts")
+
+   public void StartDatabase(){
+       database = FirebaseFirestore.getInstance();
+   }
+
+   public FirebaseFirestore GetDB(){
+       return database;
+   }
+
+   public void GetData(FirebaseFirestore db){
+      db.collection("Accounts")
               .get()
               .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                  @Override
