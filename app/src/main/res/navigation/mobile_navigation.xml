@@ -44,6 +44,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_add_card"
             app:destination="@id/nav_add_card" />
+        <action
+            android:id="@+id/action_nav_home_to_scrollingFragment"
+            app:destination="@id/nav_payment_history" />
     </fragment>
 
     <fragment
@@ -90,5 +93,10 @@
         android:id="@+id/nav_add_card"
         android:name="com.phone.mobilebank.ui.add_card.Add_cardFragment"
         android:label="@string/menu_add_card" />
+    <fragment
+        android:id="@+id/nav_payment_history"
+        android:name="com.phone.mobilebank.ui.payment_history.ScrollingFragment"
+        android:label="fragment_scrolling"
+        tools:layout="@layout/fragment_payment_history" />
 
 </navigation>

@@ -29,16 +29,27 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.phone.mobilebank.R;
 import com.phone.mobilebank.databinding.FragmentHomeBinding;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private Communication com;
+    private String[] data = new String[4];
+    public String[] data1= {"A"};
+    public ArrayList<String> store= new ArrayList<>();
+    int i=1;
+    FirebaseFirestore database = FirebaseFirestore.getInstance();
 
     String T1 ,T2;
 
     public static final String TAG = "YOUR-TAG-NAME";
 
-    FirebaseFirestore database = FirebaseFirestore.getInstance();
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,7 +60,9 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
         final String[] name1 = new String[1];
         final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+
 
         binding.IMBTNCardTransfer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,16 +122,35 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    public void Payment(){
+
+    }
+
+    public ArrayList<String> getStores(){
+        return store;
+    }
+
     private void ShowDialog() {
 
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_dialog_menu);
 
+
+
         LinearLayout card_details = dialog.findViewById(R.id.card_detail);
         LinearLayout get_iban = dialog.findViewById(R.id.get_IBAN);
         LinearLayout block_card = dialog.findViewById(R.id.block_card);
         LinearLayout transaction_history = dialog.findViewById(R.id.payment_history);
+
+        transaction_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(HomeFragment.this)
+                        .navigate(R.id.nav_payment_history);
+                dialog.hide();
+            }
+        });
 
         card_details.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,14 +163,32 @@ public class HomeFragment extends Fragment {
                 LinearLayout p_expiry_Day = dialog2.findViewById(R.id.card_expiry_date);
                 LinearLayout p_cw = dialog2.findViewById(R.id.card_cw);
 
+                try {
+                    FileInputStream fis = getActivity().openFileInput("DAT.txt");
+                    InputStreamReader isr = new InputStreamReader(fis);
+                    BufferedReader br = new BufferedReader(isr);
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    int i = 0;
+                    while ((line = br.readLine()) != null) {
+                        data[i] = line;
+                        i++;
+                    }
+                    br.close();
+                    isr.close();
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 TextView t1 = p_card_number.findViewById(R.id.personal_card_number);
-                t1.setText(T1);
+                t1.setText(data[1]);
                 TextView t2 = p_name.findViewById(R.id.personal_card_name);
-                t2.setText(T2);
+                t2.setText(data[0]);
                 TextView t3 = p_expiry_Day.findViewById(R.id.personal_card_expiry_date);
-                t3.setText("08 / 27");
+                t3.setText(data[2]);
                 TextView t4 = p_cw.findViewById(R.id.personal_card_cw);
-                t4.setText("537");
+                t4.setText(data[3]);
 
                 dialog2.show();;
                 dialog2.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
