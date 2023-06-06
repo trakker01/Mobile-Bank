@@ -29,5 +29,8 @@
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_about"
             android:title="@string/menu_about" />
+        <item
+            android:id="@+id/nav_send_cash"
+            android:title="@string/menu_transfer" />
     </group>
 </menu>

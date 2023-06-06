@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    android:label="@string/menu_card_transfer"
+    android:label="@string/menu_transfer"
     app:startDestination="@+id/nav_home">
 
     <fragment
@@ -79,7 +79,11 @@
         android:id="@+id/nav_card_transfer"
         android:name="com.phone.mobilebank.ui.card_transfer.CardTransferFragment"
         android:label="@string/menu_card_transfer"
-        tools:layout="@layout/fragment_card_transfer" />
+        tools:layout="@layout/fragment_card_transfer">
+        <action
+            android:id="@+id/action_nav_card_transfer_to_nav_send_cash"
+            app:destination="@id/nav_send_cash" />
+    </fragment>
     <fragment
         android:id="@+id/nav_bill_payment"
         android:name="com.phone.mobilebank.ui.bill_payment.Bill_paymentFragment"
@@ -98,5 +102,10 @@
         android:name="com.phone.mobilebank.ui.payment_history.ScrollingFragment"
         android:label="fragment_scrolling"
         tools:layout="@layout/fragment_payment_history" />
+    <fragment
+        android:id="@+id/nav_send_cash"
+        android:name="com.phone.mobilebank.ui.card_transfer.send_cash.SendCashFragment"
+        android:label="@string/menu_transfer"
+        tools:layout="@layout/fragment_send_cash" />
 
 </navigation>

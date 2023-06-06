@@ -30,6 +30,7 @@ import com.phone.mobilebank.R;
 import com.phone.mobilebank.databinding.FragmentHomeBinding;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,7 +40,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private Communication com;
-    private String[] data = new String[4];
+    private String[] data = new String[5];
     public String[] data1= {"A"};
     public ArrayList<String> store= new ArrayList<>();
     int i=1;
@@ -69,29 +70,29 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 NavHostFragment.findNavController(HomeFragment.this)
                         .navigate(R.id.nav_card_transfer);
-               DocumentReference docRef = database.collection("Accounts").document("1");
-               // database.collection("Accounts").document("1")
-                        docRef.get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                     DocumentSnapshot document = task.getResult();
-                                     if (document.exists())
-                                     {
-
-                                         name1[0] = document.getString("Name");
-                                         Log.d(TAG, document.getId() + " => " + document.getData());
-                                         T1 = name1[0];
-                                         T2 = document.getData().toString();
-                                    }else{
-                                         Log.d(TAG,"No such document");
-                                    }
-                                } else {
-                                    Log.w(TAG, "Error getting documents.", task.getException());
-                                }
-                            }
-                        });
+//               DocumentReference docRef = database.collection("Accounts").document("1");
+//               // database.collection("Accounts").document("1")
+//                        docRef.get()
+//                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                if (task.isSuccessful()) {
+//                                     DocumentSnapshot document = task.getResult();
+//                                     if (document.exists())
+//                                     {
+//
+//                                         name1[0] = document.getString("Name");
+//                                         Log.d(TAG, document.getId() + " => " + document.getData());
+//                                         T1 = name1[0];
+//                                         T2 = document.getData().toString();
+//                                    }else{
+//                                         Log.d(TAG,"No such document");
+//                                    }
+//                                } else {
+//                                    Log.w(TAG, "Error getting documents.", task.getException());
+//                                }
+//                            }
+//                        });
             }
         });
 
@@ -148,7 +149,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 NavHostFragment.findNavController(HomeFragment.this)
                         .navigate(R.id.nav_payment_history);
-                dialog.hide();
+                dialog.cancel();
             }
         });
 

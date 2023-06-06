@@ -103,26 +103,10 @@ public class Add_cardFragment extends Fragment {
         binding = FragmentAddCardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         final TextView textView = binding.textAddCard;
-        //add_cardViewModel.getText().observe(getViewLifecycleOwner(),textView::setText);
 
-        try {
-            FileInputStream fis = getActivity().openFileInput(File_Name);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String line;
-            String[] data = new String[4];
-            int i = 0;
-            while ((line = br.readLine()) != null) {
-                data[i] = line;
-                i++;
-            }
-            br.close();
-            isr.close();
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        binding.textName.setText(null);
+        binding.textNumberCard.setText(null);
+        binding.textExpirationCard.setText(null);
 
 
         // fos = (File_Name,MODE_PRIVATE);
@@ -146,11 +130,12 @@ public class Add_cardFragment extends Fragment {
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                           // database.collection("Accounts").document("1").update("Name","ALEx");
                                             if (task.isSuccessful()) {
                                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                                     if (Name.equals(document.getString("Name")) &&
-                                                            Expiration.equals(document.getString("Expiration_date"))
-                                                            && Number.equals(document.getString("Card_Number"))) {
+                                                            Expiration.equals(document.getString("ExpirationDate"))
+                                                            && Number.equals(document.getString("CardNumber"))) {
                                                         try {
                                                             FileOutputStream fos = getActivity().openFileOutput(File_Name, MODE_PRIVATE);
                                                             fos.write(Name.getBytes(StandardCharsets.UTF_8));
@@ -164,10 +149,15 @@ public class Add_cardFragment extends Fragment {
                                                             fos.write('\n');
                                                             fos.write(document.getId().getBytes(StandardCharsets.UTF_8));
                                                             fos.write('\n');
+                                                            String balance = document.getDouble("Balance").toString();
+                                                            fos.write(balance.getBytes(StandardCharsets.UTF_8));
+                                                            fos.write('\n');
+                                                            Log.d("S-a adaugat", Name + " " + Expiration +" "+ Number);
                                                         } catch (IOException e) {
                                                             e.printStackTrace();
                                                         }
                                                     }
+                                                   // Log.d("S-a gasit", document.getString("ExpirationDate") + document.getString("Name") + document.getId());
                                                 }
                                             } else {
                                                 Log.w(TAG, "Error getting documents.", task.getException());
@@ -185,32 +175,6 @@ public class Add_cardFragment extends Fragment {
                 }
             }
         });
-
-        binding.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                database = FirebaseFirestore.getInstance();
-
-
-                database.collection("Card-Payments").document("1").collection("Stores").get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                int i=0;
-                                List<String> data1 = new ArrayList<String>();
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        data1.add(document.getData().toString());
-                                        Log.d(TAG, data1.get(i));
-                                        i++;
-                                    }
-                                }
-                            }
-                        });
-
-            }
-        });
-
 
         // add_cardViewModel.ChangeText(data);
 
