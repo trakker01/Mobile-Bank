@@ -6,121 +6,85 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageButton
         android:id="@+id/IMBTN_card_transfer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:layout_height="71dp"
         android:backgroundTint="#00FFFFFF"
         android:contentDescription="@string/action_settings"
         android:src="@drawable/ic_credit_card_transfer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.222"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.637" />
+        app:layout_constraintVertical_bias="0.146" />
 
-    <ImageButton
-        android:id="@+id/IMBTN_bill_payment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#00FFFFFF"
-        android:contentDescription="@string/action_settings"
-        android:src="@drawable/ic_bill_payment"
+    <TextView
+        android:id="@+id/text_moreoptions"
+        android:layout_width="379dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:text="       More options       "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.222"
+        app:layout_constraintHorizontal_bias="0.531"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.872" />
+        app:layout_constraintTop_toBottomOf="@+id/IMBTN_more_options"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <ImageButton
-        android:id="@+id/IMBTN_retrieve_cash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#00FFFFFF"
-        android:contentDescription="@string/action_settings"
-        android:src="@drawable/ic_retrieve_cash"
+    <TextView
+        android:id="@+id/text_moneytransfer"
+        android:layout_width="376dp"
+        android:layout_height="31dp"
+        android:gravity="center"
+        android:text="Money transfer   "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.748"
+        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.637" />
+        app:layout_constraintTop_toBottomOf="@+id/IMBTN_card_transfer"
+        app:layout_constraintVertical_bias="0.001" />
 
     <ImageButton
         android:id="@+id/IMBTN_more_options"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="109dp"
+        android:layout_height="71dp"
         android:backgroundTint="#00FFFFFF"
         android:contentDescription="@string/action_settings"
         android:src="@drawable/ic_more_options"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.748"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.872" />
-
-    <TextView
-        android:id="@+id/text_moneytransfer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="      Money transfer   "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.185"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IMBTN_card_transfer"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.663" />
 
     <TextView
         android:id="@+id/text_billpayment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="380dp"
+        android:layout_height="35dp"
+        android:gravity="center"
         android:text="      BIll payment    "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintHorizontal_bias="0.548"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/IMBTN_bill_payment"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.005" />
 
-    <TextView
-        android:id="@+id/text_retrievecaash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="    Whitdraw cash      "
+    <ImageButton
+        android:id="@+id/IMBTN_bill_payment"
+        android:layout_width="104dp"
+        android:layout_height="68dp"
+        android:backgroundTint="#00FFFFFF"
+        android:contentDescription="@string/action_settings"
+        android:src="@drawable/ic_bill_payment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.778"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IMBTN_retrieve_cash"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.396" />
 
-    <TextView
-        android:id="@+id/text_moreoptions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="       More options       "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.775"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IMBTN_more_options"
-        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

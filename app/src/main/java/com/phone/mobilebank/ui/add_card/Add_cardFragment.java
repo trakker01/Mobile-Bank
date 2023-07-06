@@ -1,18 +1,14 @@
 package com.phone.mobilebank.ui.add_card;
 
-//import com.phone.mobilebank.ui.BazaDeDate.Communication;
-
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,70 +17,40 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.phone.mobilebank.ui.add_card.Add_cardViewModel;
-
-import com.phone.mobilebank.R;
 import com.phone.mobilebank.databinding.FragmentAddCardBinding;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Add_cardFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
 public class Add_cardFragment extends Fragment {
 
     public static final String TAG = "YOUR-TAG-NAME";
     private static final String File_Name = "DAT.txt";
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    //Communication com = new Communication();
 
-    //String data = com.GetData();
-    //Add_cardViewModel card = new Add_cardViewModel();
+    //AESEncryptionDecryption aesEncryptionDecryption = new AESEncryptionDecryption();
     FirebaseFirestore database;
     private FragmentAddCardBinding binding;
-    // TODO: Rename and change types of parameters
-    private String DBName;
-    private String DBExpiration_Date;
-    private String DBNumber_card;
 
     public Add_cardFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Add_cardFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Add_cardFragment newInstance(String param1, String param2) {
+    public static Add_cardFragment newInstance() {
         Add_cardFragment fragment = new Add_cardFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -92,86 +58,134 @@ public class Add_cardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
+
+    private static SecretKeySpec secretKey;
+    private static byte[] key;
+    private final String mKey = "UMfDlSAKArrhmvCJEBZvcE3jBZkMavmw";
+    public void createSecreteKey(String myKey) {
+        MessageDigest sha = null;
+        try {
+            key = myKey.getBytes(StandardCharsets.UTF_8);
+            sha = MessageDigest.getInstance("SHA-1");
+            key = sha.digest(key);
+            key = Arrays.copyOf(key, 16);
+            secretKey = new SecretKeySpec(key, "AES");
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String encrypt(String text, String key){
+        try{
+            createSecreteKey(key);
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return Base64.getEncoder().encodeToString(cipher.doFinal(text.getBytes("UTF-8")));
+        } catch (Exception e) {
+            System.out.println("Error while encrypting: " + e.toString());
+        }
+        return null;
+    }
+
+    private String success = "No";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        //com.GetData();
         Add_cardViewModel add_cardViewModel = new ViewModelProvider(this).get(Add_cardViewModel.class);
         binding = FragmentAddCardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         final TextView textView = binding.textAddCard;
 
-        binding.textName.setText(null);
-        binding.textNumberCard.setText(null);
-        binding.textExpirationCard.setText(null);
+        binding.textName.setText("");
+        binding.textNumberCard.setText("");
+        binding.textExpirationCard.setText("");
 
-
-        // fos = (File_Name,MODE_PRIVATE);
 
         binding.submitData.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
+
+                //binding.erorareCard.setText("");
                 if (!binding.textName.getText().toString().equals("")) {
                     TextView ET;
+                    if (!binding.textNumberCard.getText().toString().equals("")) {
                     if (!binding.textExpirationCard.getText().toString().equals("")) {
-                        if (!binding.textNumberCard.getText().toString().equals("")) {
+
 
                             String Name = binding.textName.getText().toString();
                             String Expiration = binding.textExpirationCard.getText().toString();
                             String Number = binding.textNumberCard.getText().toString();
 
+
+
                             database = FirebaseFirestore.getInstance();
-                            //QueryDocumentSnapshot docRef = database.collection("Accounts");
-                            database.collection("Accounts")
+                            database.collection("Accounts").whereEqualTo("Name", Name)
+                                    .whereEqualTo("ExpirationDate", Expiration).whereEqualTo("CardNumber",Number)
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                           // database.collection("Accounts").document("1").update("Name","ALEx");
                                             if (task.isSuccessful()) {
+
                                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                                    if (Name.equals(document.getString("Name")) &&
-                                                            Expiration.equals(document.getString("ExpirationDate"))
-                                                            && Number.equals(document.getString("CardNumber"))) {
-                                                        try {
-                                                            FileOutputStream fos = getActivity().openFileOutput(File_Name, MODE_PRIVATE);
-                                                            fos.write(Name.getBytes(StandardCharsets.UTF_8));
-                                                            fos.write('\n');
-                                                            fos.write(Number.getBytes(StandardCharsets.UTF_8));
-                                                            fos.write('\n');
-                                                            fos.write(Expiration.getBytes(StandardCharsets.UTF_8));
-                                                            fos.write('\n');
-                                                            Log.d(TAG, "CW " + document.getString("CW"));
-                                                            fos.write(document.getString("CW").getBytes(StandardCharsets.UTF_8));
-                                                            fos.write('\n');
-                                                            fos.write(document.getId().getBytes(StandardCharsets.UTF_8));
-                                                            fos.write('\n');
-                                                            String balance = document.getDouble("Balance").toString();
-                                                            fos.write(balance.getBytes(StandardCharsets.UTF_8));
-                                                            fos.write('\n');
-                                                            Log.d("S-a adaugat", Name + " " + Expiration +" "+ Number);
-                                                        } catch (IOException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
-                                                   // Log.d("S-a gasit", document.getString("ExpirationDate") + document.getString("Name") + document.getId());
+                                                                try {
+                                                                    success = "yes";
+                                                                    FileOutputStream fos = getActivity().openFileOutput(File_Name, MODE_PRIVATE);
+                                                                    String t1 = encrypt(document.getString("Name"),mKey);
+                                                                    fos.write(t1.getBytes(StandardCharsets.UTF_8));
+                                                                    fos.write('\n');
+                                                                    String t2 = encrypt(document.getString("CardNumber"),mKey);
+                                                                    fos.write(t2.getBytes(StandardCharsets.UTF_8));
+                                                                    fos.write('\n');
+                                                                    String t3 = encrypt(document.getString("ExpirationDate"),mKey);
+                                                                    fos.write(t3.getBytes(StandardCharsets.UTF_8));
+                                                                    fos.write('\n');
+                                                                    String t4 = encrypt(document.getString("CW"),mKey);
+                                                                    fos.write(t4.getBytes(StandardCharsets.UTF_8));
+                                                                    fos.write('\n');
+                                                                    String t5 = encrypt(document.getId(),mKey);
+                                                                    fos.write(t5.getBytes(StandardCharsets.UTF_8));
+                                                                    fos.write('\n');
+                                                                    String balance = document.getDouble("Balance").toString();
+                                                                    String t6 = encrypt(balance,mKey);
+                                                                    fos.write(t6.getBytes(StandardCharsets.UTF_8));
+                                                                    fos.write('\n');
+                                                                    String t7 = encrypt(document.getString("IBAN"),mKey);
+                                                                    fos.write(t7.getBytes(StandardCharsets.UTF_8));
+                                                                    fos.write('\n');
+                                                                    String bool = document.getBoolean("Active").toString();
+                                                                    String t8 = encrypt(bool,mKey);
+                                                                    fos.write(t8.getBytes(StandardCharsets.UTF_8));
+                                                                    fos.write('\n');
+                                                                } catch (IOException ez) {
+                                                                    ez.printStackTrace();
+
+                                                                }
                                                 }
                                             } else {
-                                                Log.w(TAG, "Error getting documents.", task.getException());
+                                                binding.erorareCard.setText("Datele introduse nu sunt asociate cu un cont existent!");
                                             }
                                         }
                                     });
+                            if(success.equals("yes")){
+                                binding.erorareCard.setText("Datele introduse nu sunt asociate cu un cont existent!");
+                            }else{
+                                Snackbar mySnackbar = Snackbar.make(view,"Cardul a fost adaugat!", BaseTransientBottomBar.LENGTH_LONG);
+                                mySnackbar.show();
+                            }
                         } else {
-
+                        binding.erorareCard.setText("Nu ai introdus data de expirare a  cardului!");
                         }
                     } else {
-
+                        binding.erorareCard.setText("Nu ai introdus numarul cardului!");
                     }
                 } else {
-
+                    binding.erorareCard.setText("Nu ai introdus numele detinatorul cardului!");
                 }
             }
         });
@@ -183,6 +197,9 @@ public class Add_cardFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        binding.textName.setText("");
+        binding.textNumberCard.setText("");
+        binding.textExpirationCard.setText("");
         super.onDestroyView();
         binding = null;
     }

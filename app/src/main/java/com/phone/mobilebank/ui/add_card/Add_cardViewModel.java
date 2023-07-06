@@ -15,9 +15,6 @@ public class Add_cardViewModel extends ViewModel{
         mText.setValue("this is Add card fragment");
     }
 
-   // protected String GetName(){
-
-   // }
 
     public void ChangeText(String text){
         mText.setValue(text);

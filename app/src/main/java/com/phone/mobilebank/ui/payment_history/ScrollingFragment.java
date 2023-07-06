@@ -12,48 +12,46 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.api.LabelDescriptor;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.phone.mobilebank.MainActivity;
 import com.phone.mobilebank.R;
 import com.phone.mobilebank.databinding.FragmentPaymentHistoryBinding;
 import com.phone.mobilebank.ui.home.HomeFragment;
-import com.phone.mobilebank.ui.payment_history.ScrollingFragment;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Objects;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 public class ScrollingFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     HomeFragment home;
     private FragmentPaymentHistoryBinding binding;
     FirebaseFirestore database = FirebaseFirestore.getInstance();
-    ArrayList<String> data = new ArrayList<>();
+    private String[] data = new String[8];
     ArrayList<String> data1 = new ArrayList<>();
 
 
@@ -66,7 +64,33 @@ public class ScrollingFragment extends Fragment implements AdapterView.OnItemCli
         super.onCreate(savedInstanceState);
     }
 
+    private static SecretKeySpec secretKey;
+    private static byte[] key;
+    private static final String mkey="UMfDlSAKArrhmvCJEBZvcE3jBZkMavmw";
+    public void createSecreteKey(String myKey) {
+        MessageDigest sha = null;
+        try {
+            key = myKey.getBytes(StandardCharsets.UTF_8);
+            sha = MessageDigest.getInstance("SHA-1");
+            key = sha.digest(key);
+            key = Arrays.copyOf(key, 16);
+            secretKey = new SecretKeySpec(key, "AES");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public String decrypt(String text, String key) {
+        try {
+            createSecreteKey(key);
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            return new String(cipher.doFinal(Base64.getDecoder().decode(text)));
+        } catch (Exception e) {
+            System.out.println("Error while decrypting: " + e.toString());
+        }
+        return null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -75,23 +99,7 @@ public class ScrollingFragment extends Fragment implements AdapterView.OnItemCli
         binding = FragmentPaymentHistoryBinding.inflate(inflater,container,false);
         View root = binding.getRoot();
 
-        try {
-            FileInputStream fis = getActivity().openFileInput("DAT.txt");
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String line;
 
-            while ((line = br.readLine()) != null) {
-                data.add(line);
-
-            }
-            br.close();
-            isr.close();
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return root;
     }
     int i=0;
@@ -101,8 +109,28 @@ public class ScrollingFragment extends Fragment implements AdapterView.OnItemCli
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
 
+        try {
+            FileInputStream fis = getActivity().openFileInput("DAT.txt");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            int i = 0;
+            while ((line = br.readLine()) != null) {
+                data[i] = decrypt(line,mkey);
+                i++;
 
-        database.collection("Card-Payments").document(data.get(4)).collection("Stores")
+
+            }
+            br.close();
+            isr.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d("ID", data[4]);
+
+        database.collection("Card-Payments").document(data[4]).collection("Payments")
                 .orderBy("Date",Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -111,7 +139,7 @@ public class ScrollingFragment extends Fragment implements AdapterView.OnItemCli
 
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                data1.add(document.getString("Name"));
+                                data1.add(document.getString("Company_name"));
                                 data2.add(document.getId());
                                 Log.d("Mesaj : ", document.getId() + " Number " + data1.size());
                                 i++;
@@ -148,7 +176,7 @@ public class ScrollingFragment extends Fragment implements AdapterView.OnItemCli
         LinearLayout value = dialog3.findViewById(R.id.value);
         LinearLayout type = dialog3.findViewById(R.id.type_transaction);
 
-        database.collection("Card-Payments").document(data.get(4)).collection("Stores").document(data2.get(i))
+        database.collection("Card-Payments").document(data[4]).collection("Payments").document(data2.get(i))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -159,22 +187,13 @@ public class ScrollingFragment extends Fragment implements AdapterView.OnItemCli
                             if(document.exists()) {
                                 TextView t1 = name.findViewById(R.id.personal_name);
                                 TextView t2 = date.findViewById(R.id.personal_date);
-                                TextView t3 = type.findViewById(R.id.personal_type_transaction);
+                                TextView t3 = type.findViewById(R.id.company_IBAN);
                                 TextView t4 = value.findViewById(R.id.personal_value);
 
                                 t1.setText(Cname);
-                                String Hr = document.getString("Hour");
-                                String Me = document.getString("Minute");
-                                String S = document.getString("Second");
-                                String Y = document.getString("Year");
-                                String Mh = document.getString("Month");
-                                String D = document.getString("Day");
-                                String date = Hr+":"+Me+":"+S+"          "+D+"/"+Mh+"/"+Y;
-                                t2.setText(date);
-                                Double t = document.getDouble("Value");
-                                String va = Objects.requireNonNull(t).toString();
-                                t4.setText(va);
-                                t3.setText(document.getString("Type"));
+                                t2.setText(document.getString("Date"));
+                                t3.setText(document.getString("IBAN"));
+                                t4.setText(String.valueOf(document.getDouble("Value")));
                             }
                         }
                     }

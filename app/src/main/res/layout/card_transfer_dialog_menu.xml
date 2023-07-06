@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/date"
+        android:id="@+id/Recipient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -16,12 +16,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Date :"
+            android:text="Recipient :"
             android:textSize="12dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/personal_date"
+            android:id="@+id/PRecipient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -32,33 +32,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Name :"
-            android:textSize="12dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/personal_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="-"
-            android:textSize="12dp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/type_transaction"
+        android:id="@+id/IBAN"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -73,7 +47,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/company_IBAN"
+            android:id="@+id/PIBAN"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -84,7 +58,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/value"
+        android:id="@+id/value_sent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -94,12 +68,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Value :"
+            android:text="Amount :"
             android:textSize="12dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/personal_value"
+            android:id="@+id/Pvalue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="-"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Detail :"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/PDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"

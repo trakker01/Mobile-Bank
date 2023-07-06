@@ -1,9 +1,7 @@
 package com.phone.mobilebank;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.phone.mobilebank.ui.data_base.Communication;
+
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.ImageButton;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -14,50 +12,29 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-
-
 import com.phone.mobilebank.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-    Communication com;
-    FirebaseFirestore db ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-      //  db= FirebaseFirestore.getInstance();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.appBarMain.toolbar);
-
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_notification, R.id.nav_user_guide,R.id.nav_settings,
-                R.id.nav_add_card,R.id.nav_about)
+                R.id.nav_home, R.id.nav_notification,
+                R.id.nav_add_card)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-    }
-
-    public FirebaseFirestore getDB(){
-        return db;
-    }
-
-    public void getInstance(){
-        db = FirebaseFirestore.getInstance();
-    }
-
-    private void ShowDialog(){
-
     }
 
     @Override
