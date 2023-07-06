@@ -324,6 +324,7 @@ public class HomeFragment extends Fragment {
                 LinearLayout p_name = dialog2.findViewById(R.id.card_name);
                 LinearLayout p_expiry_Day = dialog2.findViewById(R.id.card_expiry_date);
                 LinearLayout p_cw = dialog2.findViewById(R.id.card_cw);
+                LinearLayout p_balance = dialog2.findViewById(R.id.card_balance);
 
                 try {
                     FileInputStream fis = getActivity().openFileInput("DAT.txt");
@@ -342,6 +343,22 @@ public class HomeFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+                TextView t5 = p_balance.findViewById(R.id.personal_card_balance);
+
+                database.collection("Accounts").document(decrypt(data[4],mkey))
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        t5.setText(document.getDouble("Balance").toString());
+                                    }
+                                }
+                            }
+                        });
 
                 TextView t1 = p_card_number.findViewById(R.id.personal_card_number);
                 String ent1 = decrypt(data[1],mkey);

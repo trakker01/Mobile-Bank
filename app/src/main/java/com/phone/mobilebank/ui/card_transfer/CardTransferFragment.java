@@ -121,6 +121,8 @@ public class CardTransferFragment extends Fragment implements AdapterView.OnItem
 
     ArrayList<String> data1 = new ArrayList<>();
     ArrayList<String> data2 = new ArrayList<>();
+    ArrayList<String> data3 = new ArrayList<>();
+    ArrayList<String> data4 = new ArrayList<>();
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -156,8 +158,6 @@ public class CardTransferFragment extends Fragment implements AdapterView.OnItem
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 data1.add(document.getString("Recipient"));
                                 data2.add(document.getId());
-                                Log.d("Mesaj : ", document.getId() + " Number " + data1.size());
-                                i++;
                             }
                         }
                         ListView listView=(ListView) view.findViewById(R.id.list_card_transfer_history);
@@ -179,6 +179,7 @@ public class CardTransferFragment extends Fragment implements AdapterView.OnItem
         String t = adapterView.getAdapter().getItem(i).toString();
         ShowDialog(t,i);
     }
+
 
     private void ShowDialog(String Cname,int i){
         final Dialog dialog3 = new Dialog(getContext());
@@ -218,4 +219,6 @@ public class CardTransferFragment extends Fragment implements AdapterView.OnItem
         dialog3.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog3.getWindow().setGravity(Gravity.BOTTOM);
     }
+
+
 }
