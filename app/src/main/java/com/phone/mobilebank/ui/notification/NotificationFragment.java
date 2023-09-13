@@ -122,7 +122,7 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+//data[4]
         database.collection("Card-Transfer").document(data[4]).collection("Received")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

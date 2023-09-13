@@ -201,7 +201,7 @@ public class Bill_paymentFragment extends Fragment{
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         database.collection("Companies").document(company).collection("Facturi").document(id[0])
-                                                .update("Paid", true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                .update("Paid", "true").addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
                                                         Date currentTime = Calendar.getInstance().getTime();

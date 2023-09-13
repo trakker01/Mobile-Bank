@@ -110,6 +110,7 @@ public class CardTransferFragment extends Fragment implements AdapterView.OnItem
             public void onClick(View view) {
                 NavHostFragment.findNavController(CardTransferFragment.this)
                         .navigate(R.id.nav_send_cash);
+                data1.clear();
             }
         });
 
@@ -121,8 +122,6 @@ public class CardTransferFragment extends Fragment implements AdapterView.OnItem
 
     ArrayList<String> data1 = new ArrayList<>();
     ArrayList<String> data2 = new ArrayList<>();
-    ArrayList<String> data3 = new ArrayList<>();
-    ArrayList<String> data4 = new ArrayList<>();
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
