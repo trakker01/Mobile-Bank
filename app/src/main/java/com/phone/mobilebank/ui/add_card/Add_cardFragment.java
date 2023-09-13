@@ -158,7 +158,7 @@ public class Add_cardFragment extends Fragment {
                                                                     String t7 = encrypt(document.getString("IBAN"),mKey);
                                                                     fos.write(t7.getBytes(StandardCharsets.UTF_8));
                                                                     fos.write('\n');
-                                                                    String bool = document.getBoolean("Active").toString();
+                                                                    String bool = document.getString("Active");
                                                                     String t8 = encrypt(bool,mKey);
                                                                     fos.write(t8.getBytes(StandardCharsets.UTF_8));
                                                                     fos.write('\n');

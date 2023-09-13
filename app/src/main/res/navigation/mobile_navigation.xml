@@ -15,29 +15,8 @@
             android:id="@+id/action_nav_home_to_nav_gallery"
             app:destination="@id/nav_notification" />
         <action
-            android:id="@+id/action_nav_home_to_nav_slideshow"
-            app:destination="@id/nav_user_guide" />
-        <action
-            android:id="@+id/action_nav_home_to_settingsFragment"
-            app:destination="@id/nav_settings" />
-        <action
-            android:id="@+id/action_nav_home_to_payment_methodFragment"
-            app:destination="@id/nav_payment_method" />
-        <action
-            android:id="@+id/action_nav_home_to_nav_settings"
-            app:destination="@id/nav_settings" />
-        <action
-            android:id="@+id/action_nav_home_to_about"
-            app:destination="@id/nav_about" />
-        <action
-            android:id="@+id/action_nav_home_to_nav_settings2"
-            app:destination="@id/nav_settings" />
-        <action
             android:id="@+id/action_nav_home_to_nav_card_transfer"
             app:destination="@id/nav_card_transfer" />
-        <action
-            android:id="@+id/action_nav_home_to_nav_cash_withdraw"
-            app:destination="@id/nav_cash_withdraw" />
         <action
             android:id="@+id/action_nav_home_to_nav_bill_payment2"
             app:destination="@id/nav_bill_payment" />
@@ -52,29 +31,9 @@
     <fragment
         android:id="@+id/nav_notification"
         android:name="com.phone.mobilebank.ui.notification.NotificationFragment"
-        android:label="@string/menu_notifications"
+        android:label="@string/menu_payment"
         tools:layout="@layout/fragment_notification" />
 
-    <fragment
-        android:id="@+id/nav_user_guide"
-        android:name="com.phone.mobilebank.ui.user_guide.User_GuideFragment"
-        android:label="@string/menu_user_guide"
-        tools:layout="@layout/fragment_user_guide" />
-    <fragment
-        android:id="@+id/nav_settings"
-        android:name="com.phone.mobilebank.ui.settings.SettingsFragment"
-        android:label="@string/menu_settings"
-        tools:layout="@layout/fragment_settings" />
-    <fragment
-        android:id="@+id/nav_payment_method"
-        android:name="com.phone.mobilebank.ui.payment_method.Payment_methodFragment"
-        android:label="@string/menu_Payment_method"
-        tools:layout="@layout/fragment_payment_method" />
-    <fragment
-        android:id="@+id/nav_about"
-        android:name="com.phone.mobilebank.ui.about.AboutFragment"
-        android:label="@string/menu_about"
-        tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/nav_card_transfer"
         android:name="com.phone.mobilebank.ui.card_transfer.CardTransferFragment"
@@ -89,18 +48,13 @@
         android:name="com.phone.mobilebank.ui.bill_payment.Bill_paymentFragment"
         android:label="@string/menu_bill_payment" />
     <fragment
-        android:id="@+id/nav_cash_withdraw"
-        android:name="com.phone.mobilebank.ui.cash_withdraw.Cash_withdrawFragment"
-        android:label="@string/menu_cash_withdraw"
-        tools:layout="@layout/fragment_cash_withdraw" />
-    <fragment
         android:id="@+id/nav_add_card"
         android:name="com.phone.mobilebank.ui.add_card.Add_cardFragment"
         android:label="@string/menu_add_card" />
     <fragment
         android:id="@+id/nav_payment_history"
         android:name="com.phone.mobilebank.ui.payment_history.ScrollingFragment"
-        android:label="fragment_scrolling"
+        android:label="Payment history"
         tools:layout="@layout/fragment_payment_history" />
     <fragment
         android:id="@+id/nav_send_cash"

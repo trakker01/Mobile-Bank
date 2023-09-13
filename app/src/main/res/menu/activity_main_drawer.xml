@@ -15,7 +15,7 @@
             android:title="@string/menu_add_card" />
         <item
             android:id="@+id/nav_notification"
-            android:icon="@drawable/ic_notification"
-            android:title="@string/menu_notifications" />
+            android:icon="@drawable/ic_retrieve_cash"
+            android:title="@string/menu_payment" />
     </group>
 </menu>

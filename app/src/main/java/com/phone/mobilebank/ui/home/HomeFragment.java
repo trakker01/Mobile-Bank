@@ -13,7 +13,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.phone.mobilebank.ui.data_base.Communication;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -55,7 +54,6 @@ import javax.crypto.spec.SecretKeySpec;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private Communication com;
     private String[] data = new String[9];
     public String[] data1= {"A"};
     public ArrayList<String> store= new ArrayList<>();
@@ -186,7 +184,7 @@ public class HomeFragment extends Fragment {
                if(data[7].equals("false")){
                     Snackbar mySnackbar = Snackbar.make(view,"Cardul este activ.", BaseTransientBottomBar.LENGTH_SHORT);
                     mySnackbar.show();
-                    database.collection("Accounts").document(data[4]).update("Active",true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    database.collection("Accounts").document(data[4]).update("Active","true").addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d(TAG, "DocumentSnapshot successfully updated!");
@@ -232,7 +230,7 @@ public class HomeFragment extends Fragment {
                else{
                    Snackbar mySnackbar = Snackbar.make(view,"Cardul este blocat.", BaseTransientBottomBar.LENGTH_SHORT);
                    mySnackbar.show();
-                   database.collection("Accounts").document(data[4]).update("Active",false).addOnSuccessListener(new OnSuccessListener<Void>() {
+                   database.collection("Accounts").document(data[4]).update("Active","false").addOnSuccessListener(new OnSuccessListener<Void>() {
                                @Override
                                public void onSuccess(Void aVoid) {
                                    Log.d(TAG, "DocumentSnapshot successfully updated!");
